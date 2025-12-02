@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEVICE="2C:BE:EB:0B:1E:0F"
+DEVICE="2C:BE:EE:4B:7F:68"
 CONNECTED_ICON="󰂯"   # Nerd Font Bluetooth icon connected
 DISCONNECTED_ICON="󰂲" # Nerd Font Bluetooth icon disconnected
 HIGHLIGHT_COLOR="0xffD27E99"  # Kanagawa SakuraPink
