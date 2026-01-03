@@ -6,7 +6,7 @@ app_icon() {
     Spotify)                     echo "" ;;        # nf-fa-spotify
     Discord)                     echo "" ;;        # nf-fa-discord
     Firefox)                     echo "" ;;        # nf-fa-firefox
-    Ghostty)                     echo "" ;;        # Terminal icon
+    Ghostty)                     echo "" ;;        # Terminal icon
     Code)                        echo "" ;;        # VS Code (generic name)
     "com.microsoft.VSCode" | \
     "com.visualstudio.code")     echo "" ;;        # VS Code (bundle IDs)

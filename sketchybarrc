@@ -86,12 +86,15 @@ sketchybar --default "${default[@]}"
 # Left vertical "rail" feel: Apple + a tiny status LED
 sketchybar --add item applelogo left \
            --set applelogo icon= \
+                          icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
                           icon.color=0xff${ACCENT_AMBER:2} \
                           background.color=0x22${BASE_3:2} \
                           background.corner_radius=999 \
-                          background.border_width=1 \
+                          background.border_width=0 \
                           background.border_color=0x70${ACCENT_AMBER:2} \
-                          label.drawing=off 
+                          label.drawing=off \
+			  icon.padding_left=5 \
+			  icon.padding_right=5
 
 # Small separator LED
 sketchybar --add item rail_dot left \
@@ -99,8 +102,8 @@ sketchybar --add item rail_dot left \
                           icon.color=0xaa${ACCENT_STEEL:2} \
                           background.drawing=off \
                           label.drawing=off \
-                          padding_left=2 \
-                          padding_right=2
+                          icon.padding_left=2 \
+                          icon.padding_right=2
 
 ############################
 #  Rift Workspaces (CORE)  #
@@ -133,7 +136,7 @@ for (( i=0; i<workspace_count; i++ )); do
 
     background.color=0x20${BASE_2:2}
     background.corner_radius=9
-    background.border_width=1
+    background.border_width=0
     background.border_color=0x90$space_color
     background.height=22
 
@@ -158,15 +161,6 @@ sketchybar --add item rift_updater left \
 #  LEFT MID: front app + BT    #
 ################################
 
-# Subtle divider
-sketchybar --add item left_separator left \
-           --set left_separator icon="⸺" \
-                               icon.color=0x66${ACCENT_STEEL:2} \
-                               background.drawing=off \
-                               label.drawing=off \
-                               padding_left=6 \
-                               padding_right=8
-
 # Front App – cyan border, name only
 sketchybar --add item front_app left \
            --set front_app icon.drawing=off \
@@ -181,6 +175,81 @@ sketchybar --add item front_app left \
                           script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
+sketchybar --add item launcher left \
+           --set launcher icon= \
+                         icon.color=0xff${ACCENT_AMBER:2} \
+                         label="Launch" \
+			 label.drawing=off \
+                         label.color=0xff${FG_PRIMARY:2} \
+                         background.color=0x20${BASE_3:2} \
+                         background.corner_radius=8 \
+                         background.border_width=1 \
+                         background.border_color=0x80${ACCENT_AMBER:2} \
+                         click_script='sketchybar --set $NAME popup.drawing=toggle' \
+                         popup.horizontal=on \
+                         popup.align=center \
+                         popup.background.color=0xee${BASE_2:2} \
+                         popup.background.corner_radius=10 \
+                         popup.background.border_width=1 \
+                         popup.background.border_color=0xa0${BASE_4:2}
+
+sketchybar --add item launch.finder popup.launcher \
+           --set launch.finder icon=\
+                               label="Finder" \
+			       label.drawing=off \
+                               icon.color=0xff${ACCENT_CYAN:2} \
+                               background.color=0x22${BASE_3:2} \
+                               background.corner_radius=7 \
+                               background.border_width=1 \
+                               background.border_color=0x60${ACCENT_CYAN:2} \
+                               click_script='open -a Finder'
+
+sketchybar --add item launch.ghostty popup.launcher \
+           --set launch.ghostty icon=󱙝\
+                               label="Ghostty" \
+			       label.drawing=off \
+                               icon.color=0xff${ACCENT_CYAN:2} \
+                               background.color=0x22${BASE_3:2} \
+                               background.corner_radius=7 \
+                               background.border_width=1 \
+                               background.border_color=0x60${ACCENT_CYAN:2} \
+                               click_script='open -a /Applications/Ghostty.app'
+
+sketchybar --add item launch.firefox popup.launcher \
+           --set launch.firefox icon= \
+                                label="Firefox" \
+                                icon.color=0xff${ACCENT_CYAN:2} \
+			       label.drawing=off \
+                                background.color=0x22${BASE_3:2} \
+                                background.corner_radius=7 \
+                                background.border_width=1 \
+                                background.border_color=0x60${ACCENT_CYAN:2} \
+                                click_script='open -a "Firefox"'
+
+# Spotify
+sketchybar --add item launch.spotify popup.launcher \
+           --set launch.spotify icon= \
+                                label="Spotify" \
+                                icon.color=0xff${ACCENT_CYAN:2} \
+                                background.color=0x22${BASE_3:2} \
+			       label.drawing=off \
+                                background.corner_radius=7 \
+                                background.border_width=1 \
+                                background.border_color=0x60${ACCENT_CYAN:2} \
+                                click_script='open -a "Spotify"'
+
+# Discord
+sketchybar --add item launch.discord popup.launcher \
+           --set launch.discord icon= \
+                                label="Discord" \
+                                icon.color=0xff${ACCENT_CYAN:2} \
+			       label.drawing=off \
+                                background.color=0x22${BASE_3:2} \
+                                background.corner_radius=7 \
+                                background.border_width=1 \
+                                background.border_color=0x60${ACCENT_CYAN:2} \
+                                click_script='open -a "Discord"'
+
 # Bluetooth – small module
 sketchybar --add item bluetooth left \
            --set bluetooth icon=󰂯 \
@@ -194,50 +263,19 @@ sketchybar --add item bluetooth left \
                           script="$PLUGIN_DIR/bluetooth.sh" \
            --subscribe bluetooth mouse.clicked
 
-######################################
-#  CENTER-ish: system metrics (NEW)  #
-######################################
-
-# CPU usage (you need a cpu.sh in plugins; simple one-liner top parsing)
-sketchybar --add item cpu center \
-           --set cpu icon= \
-                     icon.color=0xff${ACCENT_LIME:2} \
-                     label.color=0xff${FG_SECONDARY:2} \
-                     background.color=0x18${BASE_3:2} \
-                     background.corner_radius=7 \
-                     background.border_width=1 \
-                     background.border_color=0x60${ACCENT_LIME:2} \
-                     script="$PLUGIN_DIR/cpu.sh" \
-                     update_freq=5
-
-# RAM usage
-sketchybar --add item ram center \
-           --set ram icon= \
-                    icon.color=0xff${ACCENT_AMBER:2} \
-                    label.color=0xff${FG_SECONDARY:2} \
-                    background.color=0x18${BASE_3:2} \
-                    background.corner_radius=7 \
-                    background.border_width=1 \
-                    background.border_color=0x60${ACCENT_AMBER:2} \
-                    script="$PLUGIN_DIR/ram.sh" \
-                    update_freq=7
-
-#################################
-#  RIGHT: network + system      #
-#################################
-
-# Network (Wi-Fi / IP)
-sketchybar --add item network right \
-           --set network icon=󰤨 \
-                          icon.color=0xff${ACCENT_CYAN:2} \
-                          label.color=0xff${FG_SECONDARY:2} \
-                          background.color=0x18${BASE_3:2} \
-                          background.corner_radius=7 \
-                          background.border_width=1 \
-                          background.border_color=0x70${ACCENT_CYAN:2} \
-                          script="$PLUGIN_DIR/network.sh" \
-                          update_freq=10
-
+# Clock – final anchor on far right
+sketchybar --add item clock right \
+           --set clock icon=󰥔 \
+                      icon.color=0xff${ACCENT_CYAN:2} \
+                      label.color=0xff${FG_PRIMARY:2} \
+                      background.color=0x22${BASE_3:2} \
+                      background.corner_radius=8 \
+                      background.border_width=1 \
+                      background.border_color=0xa0${ACCENT_CYAN:2} \
+                      label.padding_left=6 \
+                      label.padding_right=10 \
+                      update_freq=1 \
+                      script="$PLUGIN_DIR/clock.sh"
 # Battery – color-coded in script, but base teal
 sketchybar --add item battery right \
            --set battery icon=󰁹 \
@@ -247,7 +285,7 @@ sketchybar --add item battery right \
                         background.corner_radius=7 \
                         background.border_width=1 \
                         background.border_color=0x70${ACCENT_LIME:2} \
-                        update_freq=90 \
+                        update_freq=60 \
                         script="$PLUGIN_DIR/battery.sh" \
            --subscribe battery system_woke power_source_change
 
@@ -263,19 +301,6 @@ sketchybar --add item volume right \
                        script="$PLUGIN_DIR/volume.sh" \
            --subscribe volume volume_change
 
-# Clock – final anchor on far right
-sketchybar --add item clock right \
-           --set clock icon=󰥔 \
-                      icon.color=0xff${ACCENT_CYAN:2} \
-                      label.color=0xff${FG_PRIMARY:2} \
-                      background.color=0x22${BASE_3:2} \
-                      background.corner_radius=8 \
-                      background.border_width=1 \
-                      background.border_color=0xa0${ACCENT_CYAN:2} \
-                      label.padding_left=6 \
-                      label.padding_right=10 \
-                      update_freq=1 \
-                      script="$PLUGIN_DIR/clock.sh"
 
 #######################################
 #  RIGHT: Spotify popup (refined)     #
@@ -288,7 +313,6 @@ POPUP_SCRIPT="sketchybar -m --set \$NAME popup.drawing=toggle"
 sketchybar --add event spotify_change $SPOTIFY_EVENT \
            --add item spotify.name right \
            --set spotify.name icon=󰓇 \
-                             icon.color=0xff${ACCENT_TEAL:2} \
                              label="Now Playing" \
                              label.color=0xff${FG_PRIMARY:2} \
                              label.font="JetBrainsMono Nerd Font:Medium:13.0" \

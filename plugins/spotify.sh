@@ -46,7 +46,7 @@ update() {
 
   # Default values
   TRACK="No Track"
-  ARTIST="Umang"
+  ARTIST="Secretised"
   ALBUM=""
   SHUFFLE=$(osascript -e 'tell application "Spotify" to get shuffling')
   REPEAT=$(osascript -e 'tell application "Spotify" to get repeating')
