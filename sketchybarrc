@@ -35,7 +35,7 @@ LAVENDER="0xb4befe"        # Lavender
 sketchybar --bar position=top \
                 height=34 \
                 color=0x00${SUMI_INK_0:2} \
-                shadow=on \
+		shadow=on
                 sticky=on \
                 padding_left=8 \
                 padding_right=8 \
@@ -76,39 +76,60 @@ sketchybar --add item applelogo left \
                           label.drawing=off \
                           padding_left=10 \
                           padding_right=10
-##### Mission Control Spaces - Vibrant Kanagawa #####
+
+
+##### Rift Workspaces in SketchyBar #####
 SPACE_ICONS=("一" "二" "三" "四" "五" "六" "七" "八" "九" "十")
 SPACE_COLORS=(
   "${PEACH:2}" "${GREEN:2}" "${SKY:2}" "${MAUVE:2}" "${YELLOW:2}"
   "${TEAL:2}" "${PINK:2}" "${LAVENDER:2}" "${SAPPHIRE:2}" "${MAROON:2}"
 )
 
-for i in "${!SPACE_ICONS[@]}"
-do
-  sid="$(($i+1))"
+RIFT_DATA="$(rift-cli query workspaces)"
+workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq 'length')
+max_spaces=${#SPACE_ICONS[@]}
+if [ "$workspace_count" -gt "$max_spaces" ]; then
+  workspace_count=$max_spaces
+fi
+
+for (( i=0; i<workspace_count; i++ )); do
+  sid=$((i + 1))
   color_index=$((i % ${#SPACE_COLORS[@]}))
   space_color="${SPACE_COLORS[color_index]}"
-  
-  space=(
-    space="$sid"
-    icon="${SPACE_ICONS[i]}"
-    icon.font="JetBrainsMono Nerd Font:Bold:14.0"
-    icon.color=0xff$space_color
-    icon.highlight_color=0xff${ROSEWATER:2}
-    icon.padding_left=8
-    icon.padding_right=8
-    background.color=0x15${SUMI_INK_2:2}
-    background.corner_radius=10
-    background.border_width=2
-    background.border_color=0x40$space_color
-    background.height=24
-    label.drawing=off
-    script="$PLUGIN_DIR/space.sh"
-    click_script="yabai -m space --focus $sid"
-  )
-  sketchybar --add space space."$sid" left --set space."$sid" "${space[@]}"
+
+	space=(
+	  icon="${SPACE_ICONS[i]}"
+	  icon.font="JetBrainsMono Nerd Font:Bold:14.0"
+	  icon.color=0xff$space_color
+	  icon.highlight_color=0xff${ROSEWATER:2}
+	  icon.padding_left=8
+	  icon.padding_right=6
+
+	  # Workspace pill background
+	  background.color=0x18${SUMI_INK_2:2}
+	  background.corner_radius=11
+	  background.border_width=1
+	  background.border_color=0x50$space_color
+	  background.height=26
+
+	  # Label: will hold multiple app icons
+	  label.drawing=on
+	  label.color=0xff${ROSEWATER:2}
+	  label.font="JetBrainsMono Nerd Font:Medium:13.0"
+	  # A bit more space inside pill
+	  label.padding_left=6
+	  label.padding_right=0
+	)
+
+  sketchybar --add item "rift_space.$sid" left \
+             --set "rift_space.$sid" "${space[@]}"
 done
 
+# Initial update of workspace labels
+sketchybar --add item rift_updater left \
+           --set rift_updater script="$PLUGIN_DIR/rift_workspaces.sh" \
+                              update_freq=3 \
+                              drawing=off
 ##### Left Items - Dreamy Pastels #####
 sketchybar --add item front_app left \
            --set front_app icon.drawing=off \
@@ -189,8 +210,7 @@ sketchybar --add event spotify_change $SPOTIFY_EVENT \
                              popup.background.color=0x20${SUMI_INK_0:2} \
                              popup.background.corner_radius=15 \
                              popup.background.border_width=2 \
-                             popup.background.border_color=0x60${WAVE_BLUE_1:2} \
-                             popup.background.shadow=on
+                             popup.background.border_color=0x60${WAVE_BLUE_1:2} 
 
 # Spotify Controls - Catppuccin Pastels
 sketchybar --add item spotify.back popup.spotify.name \
