@@ -1,281 +1,383 @@
-# Kanagawa x Catppuccin Fusion Theme for SketchyBar
-# A dreamy blend of nature-inspired minimalism and vibrant pastels
-# Background opacities kept minimal (≤20%) for that clean, floating aesthetic
+#!/usr/bin/env bash
 
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
-# Color Palette - Kanagawa x Catppuccin Fusion
-# Kanagawa base colors
-SUMI_INK_0="0x1f1f28"      # Dark background
-SUMI_INK_1="0x16161d"      # Darker background
-SUMI_INK_2="0x2a2a37"      # Medium background
-WAVE_BLUE_1="0x7e9cd8"     # Blue accent
-WAVE_BLUE_2="0x7fb4ca"     # Light blue
-SPRING_BLUE="0x7fb4ca"     # Spring blue
-CRYSTAL_BLUE="0x7aa89f"    # Crystal blue
+#######################################
+#  Monolith Circuit – Dark Tech Theme #
+#######################################
+# Vibe: matte charcoal, cyan/amber wiring,
+# slightly denser, more “dashboardy”.
 
-# Catppuccin vibrant accents
-ROSEWATER="0xf5e0dc"       # Warm white
-FLAMINGO="0xf2cdcd"        # Light pink
-PINK="0xf5c2e7"            # Pink
-MAUVE="0xcba6f7"           # Purple
-RED="0xf38ba8"             # Red
-MAROON="0xeba0ac"          # Maroon  
-PEACH="0xfab387"           # Orange
-YELLOW="0xf9e2af"          # Yellow
-GREEN="0xa6e3a1"           # Green
-TEAL="0x94e2d5"            # Teal
-SKY="0x89dceb"             # Sky blue
-SAPPHIRE="0x74c7ec"        # Sapphire
-BLUE="0x89b4fa"            # Blue
-LAVENDER="0xb4befe"        # Lavender
+# Base colors (matte, neutral)
+BASE_0="0x050608"  # Almost black
+BASE_1="0x0b0d10"  # Dark base
+BASE_2="0x13161c"  # Charcoal
+BASE_3="0x1b2028"  # Panel
+BASE_4="0x252c36"  # Raised panel
 
-##### Bar Appearance #####
-# Ultra-minimal bar with subtle gradient hint
+# Accents
+ACCENT_CYAN="0x5ad1e8"     # primary
+ACCENT_AMBER="0xe0a96b"    # highlight
+ACCENT_LIME="0xa6da95"     # OK status
+ACCENT_CRIMSON="0xf7768e"  # warnings
+ACCENT_VIOLET="0x9b7fdb"   # secondary
+ACCENT_STEEL="0x7f849c"    # muted lines
+
+# Text
+FG_PRIMARY="0xe2e8f0"
+FG_SECONDARY="0xcbd5f5"
+FG_DIM="0x7f849c"
+
+##############################
+#  Bar – matte monolith top  #
+##############################
+
 sketchybar --bar position=top \
-                height=34 \
-                color=0x00${SUMI_INK_0:2} \
-		shadow=on
+                height=32 \
+                color=0xff${BASE_1:2} \
+                shadow=on \
                 sticky=on \
-                padding_left=8 \
-                padding_right=8 \
+                padding_left=6 \
+                padding_right=6 \
                 corner_radius=0 \
-                border_width=0
+                border_width=2 \
+                border_color=0xff${BASE_3:2}
 
-##### Defaults - Kanagawa x Catppuccin Fusion #####
+################################
+#  Global defaults / “modules” #
+################################
+
+MODULE_BG_ALPHA="16"       # very subtle background
+MODULE_BORDER_ALPHA="45"   # thin edge
+TEXT_ALPHA="ff"
+
 default=(
-  padding_left=8
-  padding_right=8
+  padding_left=6
+  padding_right=6
+
   icon.font="JetBrainsMono Nerd Font:Bold:16.0"
   label.font="JetBrainsMono Nerd Font:Medium:13.0"
-  background.color=0x20${SUMI_INK_1:2}
-  background.corner_radius=8
-  background.height=26
-  background.border_width=1
-  background.border_color=0x30${WAVE_BLUE_1:2}
-  icon.color=0xff${SKY:2}
-  label.color=0xff${ROSEWATER:2}
-  icon.padding_left=6
-  icon.padding_right=6
-  label.padding_left=6
-  label.padding_right=6
+
   icon.font.size=15.0
   label.font.size=13.0
+
+  icon.color=0x${TEXT_ALPHA}${ACCENT_CYAN:2}
+  label.color=0x${TEXT_ALPHA}${FG_PRIMARY:2}
+
+  icon.padding_left=6
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=6
+
+  background.color=0x${MODULE_BG_ALPHA}${BASE_3:2}
+  background.corner_radius=7
+  background.height=24
+  background.border_width=1
+  background.border_color=0x${MODULE_BORDER_ALPHA}${BASE_4:2}
 )
+
 sketchybar --default "${default[@]}"
 
-##### Apple Logo - Catppuccin Rainbow #####
+################################
+#  LEFT RAIL: logo + workspaces
+################################
+
+# Left vertical "rail" feel: Apple + a tiny status LED
 sketchybar --add item applelogo left \
            --set applelogo icon= \
-                          icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
-                          icon.color=0xff${PINK:2} \
-                          background.color=0x18${MAUVE:2} \
-                          background.corner_radius=12 \
+                          icon.color=0xff${ACCENT_AMBER:2} \
+                          background.color=0x22${BASE_3:2} \
+                          background.corner_radius=999 \
                           background.border_width=1 \
-                          background.border_color=0x40${PINK:2} \
+                          background.border_color=0x70${ACCENT_AMBER:2} \
+                          label.drawing=off 
+
+# Small separator LED
+sketchybar --add item rail_dot left \
+           --set rail_dot icon= \
+                          icon.color=0xaa${ACCENT_STEEL:2} \
+                          background.drawing=off \
                           label.drawing=off \
-                          padding_left=10 \
-                          padding_right=10
+                          padding_left=2 \
+                          padding_right=2
 
+############################
+#  Rift Workspaces (CORE)  #
+############################
+# Functionality preserved: same RIFT_DATA, loop, updater
+# Only styling / icons changed.
 
-##### Rift Workspaces in SketchyBar #####
-SPACE_ICONS=("一" "二" "三" "四" "五" "六" "七" "八" "九" "十")
+SPACE_ICONS=("◈" "◆" "◇" "⬢" "⬡" "⬣" "⬟" "◍" "◌" "◎")
 SPACE_COLORS=(
-  "${PEACH:2}" "${GREEN:2}" "${SKY:2}" "${MAUVE:2}" "${YELLOW:2}"
-  "${TEAL:2}" "${PINK:2}" "${LAVENDER:2}" "${SAPPHIRE:2}" "${MAROON:2}"
+  "${ACCENT_CYAN:2}"   "${ACCENT_VIOLET:2}" "${ACCENT_AMBER:2}" "${ACCENT_LIME:2}" "${ACCENT_CYAN:2}"
+  "${ACCENT_VIOLET:2}" "${ACCENT_AMBER:2}"  "${ACCENT_LIME:2}"  "${ACCENT_CYAN:2}" "${ACCENT_VIOLET:2}"
 )
 
-RIFT_DATA="$(rift-cli query workspaces)"
+RIFT_DATA="$(rift-cli query workspaces 2>/dev/null || echo '[]')"
 workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq 'length')
 max_spaces=${#SPACE_ICONS[@]}
-if [ "$workspace_count" -gt "$max_spaces" ]; then
-  workspace_count=$max_spaces
-fi
+(( workspace_count > max_spaces )) && workspace_count=$max_spaces
 
 for (( i=0; i<workspace_count; i++ )); do
   sid=$((i + 1))
   color_index=$((i % ${#SPACE_COLORS[@]}))
   space_color="${SPACE_COLORS[color_index]}"
 
-	space=(
-	  icon="${SPACE_ICONS[i]}"
-	  icon.font="JetBrainsMono Nerd Font:Bold:14.0"
-	  icon.color=0xff$space_color
-	  icon.highlight_color=0xff${ROSEWATER:2}
-	  icon.padding_left=8
-	  icon.padding_right=6
+  space=(
+    icon="${SPACE_ICONS[i]}"
+    icon.color=0xff$space_color
+    icon.highlight_color=0xff${FG_PRIMARY:2}
+    icon.padding_left=6
+    icon.padding_right=3
 
-	  # Workspace pill background
-	  background.color=0x18${SUMI_INK_2:2}
-	  background.corner_radius=11
-	  background.border_width=1
-	  background.border_color=0x50$space_color
-	  background.height=26
+    background.color=0x20${BASE_2:2}
+    background.corner_radius=9
+    background.border_width=1
+    background.border_color=0x90$space_color
+    background.height=22
 
-	  # Label: will hold multiple app icons
-	  label.drawing=on
-	  label.color=0xff${ROSEWATER:2}
-	  label.font="JetBrainsMono Nerd Font:Medium:13.0"
-	  # A bit more space inside pill
-	  label.padding_left=6
-	  label.padding_right=0
-	)
+    label.drawing=on
+    label.color=0xff${FG_SECONDARY:2}
+    label.font="JetBrainsMono Nerd Font:Medium:13.0"
+    label.padding_left=4
+    label.padding_right=4
+  )
 
   sketchybar --add item "rift_space.$sid" left \
              --set "rift_space.$sid" "${space[@]}"
 done
 
-# Initial update of workspace labels
+# Updater stays as-is logically (hidden)
 sketchybar --add item rift_updater left \
            --set rift_updater script="$PLUGIN_DIR/rift_workspaces.sh" \
                               update_freq=3 \
                               drawing=off
-##### Left Items - Dreamy Pastels #####
+
+################################
+#  LEFT MID: front app + BT    #
+################################
+
+# Subtle divider
+sketchybar --add item left_separator left \
+           --set left_separator icon="⸺" \
+                               icon.color=0x66${ACCENT_STEEL:2} \
+                               background.drawing=off \
+                               label.drawing=off \
+                               padding_left=6 \
+                               padding_right=8
+
+# Front App – cyan border, name only
 sketchybar --add item front_app left \
            --set front_app icon.drawing=off \
-                          background.color=0x18${TEAL:2} \
+                          background.color=0x22${BASE_3:2} \
                           background.corner_radius=8 \
                           background.border_width=1 \
-                          background.border_color=0x40${TEAL:2} \
-                          label.color=0xff${ROSEWATER:2} \
+                          background.border_color=0xa0${ACCENT_CYAN:2} \
+                          label.color=0xff${FG_PRIMARY:2} \
                           label.font="JetBrainsMono Nerd Font:Medium:13.0" \
+                          label.padding_left=8 \
+                          label.padding_right=10 \
                           script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
+# Bluetooth – small module
 sketchybar --add item bluetooth left \
            --set bluetooth icon=󰂯 \
-                          icon.color=0xff${BLUE:2} \
-                          background.color=0x15${SUMI_INK_2:2} \
-                          background.corner_radius=8 \
+                          icon.color=0xff${ACCENT_VIOLET:2} \
+                          background.color=0x18${BASE_2:2} \
+                          background.corner_radius=7 \
                           background.border_width=1 \
-                          background.border_color=0x40${BLUE:2} \
+                          background.border_color=0x70${ACCENT_VIOLET:2} \
+                          label.drawing=off \
                           update_freq=5 \
                           script="$PLUGIN_DIR/bluetooth.sh" \
-                          label.drawing=off \
            --subscribe bluetooth mouse.clicked
 
-##### Right Items - Kanagawa Nature Vibes #####
-sketchybar --add item clock right \
-           --set clock icon=󰥔 \
-                      icon.color=0xff${LAVENDER:2} \
-                      icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
-                      label.color=0xff${ROSEWATER:2} \
-                      background.color=0x18${LAVENDER:2} \
-                      background.corner_radius=8 \
-                      background.border_width=1 \
-                      background.border_color=0x40${LAVENDER:2} \
-                      update_freq=1 \
-                      script="$PLUGIN_DIR/clock.sh"
+######################################
+#  CENTER-ish: system metrics (NEW)  #
+######################################
 
-sketchybar --add item volume right \
-           --set volume icon=󰕾 \
-                       icon.color=0xff${YELLOW:2} \
-                       label.color=0xff${ROSEWATER:2} \
-                       background.color=0x18${YELLOW:2} \
-                       background.corner_radius=8 \
-                       background.border_width=1 \
-                       background.border_color=0x40${YELLOW:2} \
-                       script="$PLUGIN_DIR/volume.sh" \
-           --subscribe volume volume_change
+# CPU usage (you need a cpu.sh in plugins; simple one-liner top parsing)
+sketchybar --add item cpu center \
+           --set cpu icon= \
+                     icon.color=0xff${ACCENT_LIME:2} \
+                     label.color=0xff${FG_SECONDARY:2} \
+                     background.color=0x18${BASE_3:2} \
+                     background.corner_radius=7 \
+                     background.border_width=1 \
+                     background.border_color=0x60${ACCENT_LIME:2} \
+                     script="$PLUGIN_DIR/cpu.sh" \
+                     update_freq=5
 
+# RAM usage
+sketchybar --add item ram center \
+           --set ram icon= \
+                    icon.color=0xff${ACCENT_AMBER:2} \
+                    label.color=0xff${FG_SECONDARY:2} \
+                    background.color=0x18${BASE_3:2} \
+                    background.corner_radius=7 \
+                    background.border_width=1 \
+                    background.border_color=0x60${ACCENT_AMBER:2} \
+                    script="$PLUGIN_DIR/ram.sh" \
+                    update_freq=7
+
+#################################
+#  RIGHT: network + system      #
+#################################
+
+# Network (Wi-Fi / IP)
+sketchybar --add item network right \
+           --set network icon=󰤨 \
+                          icon.color=0xff${ACCENT_CYAN:2} \
+                          label.color=0xff${FG_SECONDARY:2} \
+                          background.color=0x18${BASE_3:2} \
+                          background.corner_radius=7 \
+                          background.border_width=1 \
+                          background.border_color=0x70${ACCENT_CYAN:2} \
+                          script="$PLUGIN_DIR/network.sh" \
+                          update_freq=10
+
+# Battery – color-coded in script, but base teal
 sketchybar --add item battery right \
            --set battery icon=󰁹 \
-                        icon.color=0xff${GREEN:2} \
-                        label.color=0xff${ROSEWATER:2} \
-                        background.color=0x18${GREEN:2} \
-                        background.corner_radius=8 \
+                        icon.color=0xff${ACCENT_LIME:2} \
+                        label.color=0xff${FG_SECONDARY:2} \
+                        background.color=0x18${BASE_3:2} \
+                        background.corner_radius=7 \
                         background.border_width=1 \
-                        background.border_color=0x40${GREEN:2} \
-                        update_freq=120 \
+                        background.border_color=0x70${ACCENT_LIME:2} \
+                        update_freq=90 \
                         script="$PLUGIN_DIR/battery.sh" \
            --subscribe battery system_woke power_source_change
 
-##### Spotify - Dreamy Music Vibes (Similar to Original) #####
+# Volume
+sketchybar --add item volume right \
+           --set volume icon=󰕾 \
+                       icon.color=0xff${ACCENT_AMBER:2} \
+                       label.color=0xff${FG_SECONDARY:2} \
+                       background.color=0x18${BASE_3:2} \
+                       background.corner_radius=7 \
+                       background.border_width=1 \
+                       background.border_color=0x70${ACCENT_AMBER:2} \
+                       script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change
+
+# Clock – final anchor on far right
+sketchybar --add item clock right \
+           --set clock icon=󰥔 \
+                      icon.color=0xff${ACCENT_CYAN:2} \
+                      label.color=0xff${FG_PRIMARY:2} \
+                      background.color=0x22${BASE_3:2} \
+                      background.corner_radius=8 \
+                      background.border_width=1 \
+                      background.border_color=0xa0${ACCENT_CYAN:2} \
+                      label.padding_left=6 \
+                      label.padding_right=10 \
+                      update_freq=1 \
+                      script="$PLUGIN_DIR/clock.sh"
+
+#######################################
+#  RIGHT: Spotify popup (refined)     #
+#######################################
+
 SPOTIFY_EVENT="com.spotify.client.PlaybackStateChanged"
 POPUP_SCRIPT="sketchybar -m --set \$NAME popup.drawing=toggle"
 
+# Compact “Now Playing” tile
 sketchybar --add event spotify_change $SPOTIFY_EVENT \
            --add item spotify.name right \
            --set spotify.name icon=󰓇 \
-                             icon.color=0xff${GREEN:2} \
-                             label="Umang" \
-                             label.color=0xff${ROSEWATER:2} \
-                             background.color=0x20${SUMI_INK_2:2} \
-                             background.corner_radius=10 \
+                             icon.color=0xff${ACCENT_TEAL:2} \
+                             label="Now Playing" \
+                             label.color=0xff${FG_PRIMARY:2} \
+                             label.font="JetBrainsMono Nerd Font:Medium:13.0" \
+                             background.color=0x26${BASE_3:2} \
+                             background.corner_radius=9 \
                              background.border_width=1 \
-                             background.border_color=0x50${GREEN:2} \
+                             background.border_color=0xa0${ACCENT_TEAL:2} \
+                             padding_left=9 \
+                             padding_right=9 \
                              click_script="$POPUP_SCRIPT" \
                              popup.horizontal=on \
                              popup.align=center \
-                             popup.background.color=0x20${SUMI_INK_0:2} \
-                             popup.background.corner_radius=15 \
-                             popup.background.border_width=2 \
-                             popup.background.border_color=0x60${WAVE_BLUE_1:2} 
+                             popup.background.color=0xee${BASE_2:2} \
+                             popup.background.corner_radius=11 \
+                             popup.background.border_width=1 \
+                             popup.background.border_color=0xa0${BASE_4:2}
 
-# Spotify Controls - Catppuccin Pastels
+SPOTIFY_POPUP_BG="0x22${BASE_3:2}"
+SPOTIFY_POPUP_RADIUS=7
+
+# Back
 sketchybar --add item spotify.back popup.spotify.name \
            --set spotify.back icon=󰒮 \
-                             icon.color=0xff${SKY:2} \
-                             icon.highlight_color=0xff${BLUE:2} \
-                             background.color=0x20${SUMI_INK_2:2} \
-                             background.corner_radius=8 \
+                             icon.color=0xff${ACCENT_CYAN:2} \
+                             icon.highlight_color=0xff${ACCENT_LIME:2} \
+                             background.color=$SPOTIFY_POPUP_BG \
+                             background.corner_radius=$SPOTIFY_POPUP_RADIUS \
                              background.border_width=1 \
-                             background.border_color=0x40${SKY:2} \
+                             background.border_color=0x70${ACCENT_CYAN:2} \
                              label.drawing=off \
                              script="$PLUGIN_DIR/spotify.sh" \
            --subscribe spotify.back mouse.clicked
 
+# Play / pause
 sketchybar --add item spotify.play popup.spotify.name \
            --set spotify.play icon=󰐊 \
-                             icon.color=0xff${GREEN:2} \
-                             icon.highlight_color=0xff${PEACH:2} \
-                             background.color=0x20${SUMI_INK_2:2} \
-                             background.corner_radius=8 \
+                             icon.color=0xff${ACCENT_LIME:2} \
+                             icon.highlight_color=0xff${ACCENT_AMBER:2} \
+                             background.color=$SPOTIFY_POPUP_BG \
+                             background.corner_radius=$SPOTIFY_POPUP_RADIUS \
                              background.border_width=1 \
-                             background.border_color=0x40${GREEN:2} \
+                             background.border_color=0x80${ACCENT_LIME:2} \
                              label.drawing=off \
                              updates=on \
                              script="$PLUGIN_DIR/spotify.sh" \
            --subscribe spotify.play mouse.clicked spotify_change
 
+# Next
 sketchybar --add item spotify.next popup.spotify.name \
            --set spotify.next icon=󰒭 \
-                             icon.color=0xff${SKY:2} \
-                             icon.highlight_color=0xff${BLUE:2} \
-                             background.color=0x20${SUMI_INK_2:2} \
-                             background.corner_radius=8 \
+                             icon.color=0xff${ACCENT_CYAN:2} \
+                             icon.highlight_color=0xff${ACCENT_LIME:2} \
+                             background.color=$SPOTIFY_POPUP_BG \
+                             background.corner_radius=$SPOTIFY_POPUP_RADIUS \
                              background.border_width=1 \
-                             background.border_color=0x40${SKY:2} \
+                             background.border_color=0x70${ACCENT_CYAN:2} \
                              label.drawing=off \
                              script="$PLUGIN_DIR/spotify.sh" \
            --subscribe spotify.next mouse.clicked
 
+# Shuffle
 sketchybar --add item spotify.shuffle popup.spotify.name \
            --set spotify.shuffle icon=󰒝 \
-                               icon.color=0xff${PINK:2} \
-                               icon.highlight_color=0xff${GREEN:2} \
-                               background.color=0x20${SUMI_INK_2:2} \
-                               background.corner_radius=8 \
+                               icon.color=0xff${ACCENT_VIOLET:2} \
+                               icon.highlight_color=0xff${ACCENT_LIME:2} \
+                               background.color=$SPOTIFY_POPUP_BG \
+                               background.corner_radius=$SPOTIFY_POPUP_RADIUS \
                                background.border_width=1 \
-                               background.border_color=0x40${PINK:2} \
+                               background.border_color=0x80${ACCENT_VIOLET:2} \
                                label.drawing=off \
                                script="$PLUGIN_DIR/spotify.sh" \
            --subscribe spotify.shuffle mouse.clicked
 
+# Repeat
 sketchybar --add item spotify.repeat popup.spotify.name \
            --set spotify.repeat icon=󰑖 \
-                              icon.color=0xff${MAUVE:2} \
-                              icon.highlight_color=0xff${TEAL:2} \
-                              background.color=0x20${SUMI_INK_2:2} \
-                              background.corner_radius=8 \
+                              icon.color=0xff${ACCENT_BLUE:2} \
+                              icon.highlight_color=0xff${ACCENT_AMBER:2} \
+                              background.color=$SPOTIFY_POPUP_BG \
+                              background.corner_radius=$SPOTIFY_POPUP_RADIUS \
                               background.border_width=1 \
-                              background.border_color=0x40${MAUVE:2} \
+                              background.border_color=0x80${ACCENT_BLUE:2} \
                               label.drawing=off \
                               script="$PLUGIN_DIR/spotify.sh" \
            --subscribe spotify.repeat mouse.clicked
 
-##### Finalize #####
-echo "🌸 Kanagawa x Catppuccin theme loaded successfully!"
-echo "✨ Enjoy your dreamy, minimalist status bar!"
+#################
+#  Final update #
+#################
 
+echo "Monolith Circuit theme loaded."
 sketchybar --update

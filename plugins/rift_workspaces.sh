@@ -3,16 +3,16 @@
 # Map macOS bundle_id or app name to Nerd Font icon
 app_icon() {
   case "$1" in
-    Spotify)           echo "" ;;        # nf-fa-spotify
-    Discord)           echo "" ;;        # nf-fa-discord / alternate
-    Firefox)           echo "" ;;        # nf-fa-firefox
-    Ghostty)           echo "" ;;        # Terminal icon
-    Code)              echo "" ;;
-    "com.apple.Safari") echo "" ;;      # nf-fa-globe
-    "com.apple.finder") echo "" ;;      # nf-oct-file-directory
-    "com.apple.Terminal") echo "" ;;    # nf-fa-terminal
-    "com.microsoft.VSCode"|"com.visualstudio.code")
-                       echo "" ;;       # nf-dev-visualstudio
+    Spotify)                     echo "" ;;        # nf-fa-spotify
+    Discord)                     echo "" ;;        # nf-fa-discord
+    Firefox)                     echo "" ;;        # nf-fa-firefox
+    Ghostty)                     echo "" ;;        # Terminal icon
+    Code)                        echo "" ;;        # VS Code (generic name)
+    "com.microsoft.VSCode" | \
+    "com.visualstudio.code")     echo "" ;;        # VS Code (bundle IDs)
+    "com.apple.Safari")          echo "" ;;        # nf-fa-globe
+    "com.apple.finder" | Finder) echo "" ;;        # nf-oct-file-directory
+    "com.apple.Terminal")        echo "" ;;        # nf-fa-terminal
     *)
       # Default generic window icon
       echo ""
