@@ -45,26 +45,26 @@ update() {
   fi
 
   # Default values
-  TRACK="No Track"
-  ARTIST="Secretised"
+  TRACK=""
+  ARTIST="Not Playing"
   ALBUM=""
   SHUFFLE=$(osascript -e 'tell application "Spotify" to get shuffling')
   REPEAT=$(osascript -e 'tell application "Spotify" to get repeating')
   STATE=$(osascript -e 'tell application "Spotify" to player state')
 
   if [ "$STATE" = "playing" ]; then
-    TRACK=$(osascript -e 'tell application "Spotify" to name of current track' | cut -c1-20)
-    ARTIST=$(osascript -e 'tell application "Spotify" to artist of current track' | cut -c1-20)
-    ALBUM=$(osascript -e 'tell application "Spotify" to album of current track' | cut -c1-20)
+    TRACK=$(osascript -e 'tell application "Spotify" to name of current track' | cut -c1-10)
+    ARTIST=$(osascript -e 'tell application "Spotify" to artist of current track' | cut -c1-5)
+    ALBUM=$(osascript -e 'tell application "Spotify" to album of current track' | cut -c1-15)
   fi
 
   args=()
 
   # Always show the widget if Spotify is running
   if [ "$ARTIST" = "" ]; then
-    args+=(--set spotify.name label="${TRACK}  􀉮  ${ALBUM}" drawing=on)
+    args+=(--set spotify.name label="${TRACK} ${ALBUM}" drawing=on)
   else
-    args+=(--set spotify.name label="${TRACK}  􀉮  ${ARTIST}" drawing=on)
+    args+=(--set spotify.name label="${TRACK} ${ARTIST}" drawing=on)
   fi
 
   if [ "$STATE" = "playing" ]; then

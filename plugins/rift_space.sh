@@ -27,9 +27,9 @@ for (( i=0; i<max_spaces; i++ )); do
   sid=$((i + 1))
   if [ "$sid" -eq "$active_sid" ]; then
     # Show border on active
-    sketchybar --set "rift_space.$sid" background.border_width=2
+    sketchybar --set "rift_space.$sid" label.drawing=on
   else
     # Hide border on others
-    sketchybar --set "rift_space.$sid" background.border_width=0
+    sketchybar --set "rift_space.$sid" label.drawing=on
   fi
 done
