@@ -8,9 +8,9 @@ DEFAULT_COLOR="0xff7E9CD8"    # Kanagawa WaveBlue1
 
 update() {
   if [ "$(blueutil --is-connected "$DEVICE")" = "1" ]; then
-    sketchybar --set "$NAME" icon="$CONNECTED_ICON" icon.color="$HIGHLIGHT_COLOR"
+    sketchybar --set "$NAME" icon="$CONNECTED_ICON" icon.color="$HIGHLIGHT_COLOR" icon.drawing=on label.drawing=on
   else
-    sketchybar --set "$NAME" icon="$DISCONNECTED_ICON" icon.color="$DEFAULT_COLOR"
+    sketchybar --set "$NAME" icon="$DISCONNECTED_ICON" icon.color="$DEFAULT_COLOR" icon.drawing=off label.drawing=off
   fi
 }
 
