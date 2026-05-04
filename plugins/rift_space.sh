@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # How many icons did we create?
-SPACE_ICONS=("一" "二" "三" "四" "五" "六" "七" "八" "九" "十")
+SPACE_ICONS=("I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X")
 max_spaces=${#SPACE_ICONS[@]}
 
 # Get workspace info from rift-cli

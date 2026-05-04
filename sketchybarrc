@@ -43,7 +43,7 @@ sketchybar --bar position=top \
                 corner_radius=0 \
                 border_width=0 \
                 blur_radius=0 \
-                y_offset=2
+                y_offset=0
 
 ################################
 #  Global defaults             #
@@ -80,27 +80,6 @@ default=(
 
 sketchybar --default "${default[@]}"
 
-################################
-#  Blur Brackets               #
-################################
-
-# Left blur bracket
-sketchybar --add bracket left_group '/portal/' '/cosmic_sep/' '/rift_space\..*/' '/front_app/' '/launcher/' '/launch\..*/' '/bluetooth/' \
-           --set left_group background.color=0xd0${BG_BASE:2} \
-                           background.corner_radius=16 \
-                           background.height=34 \
-                           background.border_width=1 \
-                           background.border_color=0x30${WAVE_BLUE:2} \
-                           blur_radius=30
-
-# Right blur bracket  
-sketchybar --add bracket right_group '/clock/' '/battery/' '/volume/' '/spotify\..*/' \
-           --set right_group background.color=0xd0${BG_BASE:2} \
-                            background.corner_radius=16 \
-                            background.height=34 \
-                            background.border_width=1 \
-                            background.border_color=0x30${WAVE_BLUE:2} \
-                            blur_radius=30
 
 ################################
 #  LEFT: Portal + Spaces       #
@@ -189,47 +168,6 @@ sketchybar --add item front_app left \
                           label.padding_right=12 \
                           script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
-
-sketchybar --add item launcher left \
-           --set launcher icon=󱓞 \
-                         icon.font.size=17.0 \
-                         icon.color=0xff${AUTUMN_YELLOW:2} \
-                         label.drawing=off \
-                         background.color=0x00000000 \
-                         background.corner_radius=0 \
-                         background.border_width=0 \
-                         background.shadow.drawing=off \
-                         click_script='sketchybar --set $NAME popup.drawing=toggle' \
-                         popup.horizontal=on \
-                         popup.align=center \
-                         popup.background.color=0xf0${BG_SURFACE:2} \
-                         popup.background.corner_radius=12 \
-                         popup.background.border_width=0 \
-                         popup.background.border_color=0x60${WAVE_BLUE:2} \
-                         popup.background.shadow.drawing=off
-
-launch_apps=("finder:" "ghostty:󱙝" "firefox:" "spotify:" "discord:")
-app_names=("Finder" "Ghostty" "Firefox" "Spotify" "Discord")
-app_colors=("${WAVE_AQUA:2}" "${SPRING_GREEN:2}" "${AUTUMN_YELLOW:2}" "${SPRING_GREEN:2}" "${SPRING_VIOLET:2}")
-
-for i in "${!launch_apps[@]}"; do
-  IFS=':' read -r app icon <<< "${launch_apps[i]}"
-  name="${app_names[i]}"
-  color="${app_colors[i]}"
-  
-  sketchybar --add item "launch.$app" popup.launcher \
-             --set "launch.$app" icon="$icon" \
-                                 label="$name" \
-                                 label.drawing=off \
-                                 icon.color=0xff$color \
-                                 icon.font.size=17.0 \
-                                 background.color=0x00${BG_OVERLAY:2} \
-                                 background.corner_radius=8 \
-                                 background.border_width=1 \
-                                 background.border_color=0x30$color \
-                                 background.shadow.drawing=off \
-                                 click_script="open -a \"$name\""
-done
 
 sketchybar --add item bluetooth left \
            --set bluetooth icon=󰂯 \
@@ -344,6 +282,53 @@ for ctrl in "${controls[@]}"; do
                                    script="$PLUGIN_DIR/spotify.sh" \
              --subscribe "spotify.$name" mouse.clicked spotify_change
 done
+
+################################
+#  Blur Brackets               #
+################################
+
+# Workspace pill — just the Chinese number spaces
+sketchybar --add bracket spaces_group \
+             '/rift_space\..*/' \
+           --set spaces_group \
+             background.color=0xd0${BG_BASE:2} \
+             background.corner_radius=16 \
+             background.height=34 \
+             background.border_width=1 \
+             background.border_color=0x30${WAVE_BLUE:2} \
+             background.shadow.drawing=on \
+             background.shadow.color=0x40000000 \
+             background.shadow.distance=4 \
+             blur_radius=30
+
+# Left floating pill — portal, separator, front app, launcher, bluetooth
+# sketchybar --add bracket left_group \
+#              '/portal/' '/cosmic_sep/' '/front_app/' '/launcher/' '/launch\..*/' '/bluetooth/' \
+#            --set left_group \
+#              background.color=0xd0${BG_BASE:2} \
+#              background.corner_radius=16 \
+#              background.height=34 \
+#              background.border_width=1 \
+#              background.border_color=0x30${WAVE_BLUE:2} \
+#              background.shadow.drawing=on \
+#              background.shadow.color=0x40000000 \
+#              background.shadow.distance=4 \
+#              blur_radius=30
+
+# Right floating pill — clock, battery, volume, spotify
+sketchybar --add bracket right_group \
+             '/clock/' '/battery/' '/volume/' '/spotify\..*/' \
+           --set right_group \
+             background.color=0xd0${BG_BASE:2} \
+             background.corner_radius=16 \
+             background.height=34 \
+             background.border_width=1 \
+             background.border_color=0x30${WAVE_BLUE:2} \
+             background.shadow.drawing=on \
+             background.shadow.color=0x40000000 \
+             background.shadow.distance=4 \
+             blur_radius=30
+
 
 #################
 #  Final launch #
