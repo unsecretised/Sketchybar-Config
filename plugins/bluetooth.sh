@@ -9,8 +9,17 @@ DEFAULT_COLOR="0xff7E9CD8"    # Kanagawa WaveBlue1
 update() {
   if [ "$(blueutil --is-connected "$DEVICE")" = "1" ]; then
     sketchybar --set "$NAME" icon="$CONNECTED_ICON" icon.color="$HIGHLIGHT_COLOR" icon.drawing=on label.drawing=on
+    sketchybar --set bluetooth_grp \
+	             background.color=0xd0${BG_BASE:2} \
+		     background.height=34 \
+		     background.border_width=2
+
   else
     sketchybar --set "$NAME" icon="$DISCONNECTED_ICON" icon.color="$DEFAULT_COLOR" icon.drawing=off label.drawing=off
+    sketchybar --set bluetooth_grp \
+		     background.color=0x00000000 \
+		     background.height=0 \
+		     background.border_width=0
   fi
 }
 
