@@ -29,6 +29,10 @@ FG_PRIMARY="0xdcd7ba"     # Main text
 FG_SECONDARY="0xc8c093"   # Secondary text
 FG_DIM="0x727169"         # Dimmed text
 
+WALL_BASE="0x2d343f"       # Wallpaper base slate
+WALL_MUTED="0x3d4a5c"     # Lightened slate — good for borders
+WALL_ACCENT="0x4a5f7a"    # Lifted blue-slate — brighter border option
+
 ##############################
 #  Bar – Transparent         #
 ##############################
@@ -169,6 +173,11 @@ sketchybar --add item front_app left \
                           script="$PLUGIN_DIR/front_app.sh" \
            --subscribe front_app front_app_switched
 
+sketchybar --add item spacer left \
+	   --set spacer background.color=0x00000000 \
+	   	 label.drawing=off \
+		 icon.drawing=off \
+
 sketchybar --add item bluetooth left \
            --set bluetooth icon=󰂯 \
                           icon.font.size=16.0 \
@@ -178,6 +187,8 @@ sketchybar --add item bluetooth left \
                           background.border_width=0 \
                           background.shadow.drawing=off \
                           label.drawing=off \
+			  label.padding_left=0 \
+			  label.padding_right=0 \
                           update_freq=5 \
                           script="$PLUGIN_DIR/bluetooth.sh" \
            --subscribe bluetooth mouse.clicked
@@ -309,11 +320,9 @@ sketchybar --add bracket left_group \
              background.corner_radius=16 \
              background.height=34 \
              background.border_width=1 \
-             background.border_color=0x30${WAVE_BLUE:2} \
-             background.shadow.drawing=on \
-             background.shadow.color=0x40000000 \
-             background.shadow.distance=4 \
-             blur_radius=30
+             background.border_color=0x60${SAKURA_PINK:2} \
+             background.shadow.drawing=off \
+             background.shadow.distance=0
 
 # Right floating pill — clock, battery, volume, spotify
 sketchybar --add bracket right_group \
@@ -322,12 +331,23 @@ sketchybar --add bracket right_group \
              background.color=0xd0${BG_BASE:2} \
              background.corner_radius=16 \
              background.height=34 \
-             background.border_width=1 \
-             background.border_color=0x30${WAVE_BLUE:2} \
-             background.shadow.drawing=on \
+             background.border_width=2 \
+             background.border_color=0x30${SPRING_GREEN:2} \
+             background.shadow.drawing=off \
              background.shadow.color=0x40000000 \
-             background.shadow.distance=4 \
-             blur_radius=30
+             background.shadow.distance=0 
+
+sketchybar --add bracket bluetooth_grp \
+		'/bluetooth/' \
+           --set bluetooth_grp \
+             background.color=0xd0${BG_BASE:2} \
+             background.corner_radius=16 \
+             background.height=34 \
+             background.border_width=2 \
+             background.border_color=0x30${SPRING_GREEN:2} \
+             background.shadow.drawing=off \
+             background.shadow.color=0x40000000 \
+             background.shadow.distance=0 
 
 
 #################
