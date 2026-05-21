@@ -103,41 +103,18 @@ SPACE_COLORS=(
   "${AUTUMN_YELLOW:2}"    "${AUTUMN_RED:2}"  "${WAVE_BLUE:2}"  "${SPRING_VIOLET:2}"  "${SAKURA_PINK:2}"
 )
 
-RIFT_DATA="$(rift-cli query workspaces 2>/dev/null || echo '[]')"
-workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq 'length')
-max_spaces=${#SPACE_ICONS[@]}
-(( workspace_count > max_spaces )) && workspace_count=$max_spaces
+sketchybar --add item paneru_windows left \
+           --set paneru_windows \
+               script="$PLUGIN_DIR/paneru_windows.sh" \
+               update_freq=2 \
+               icon.font="JetBrainsMono Nerd Font:Medium:15.0" \
+               icon.color=0xff${FG_PRIMARY:2} \
+               label.drawing=off \
+               background.color=0x00000000 \
+               background.corner_radius=8 \
+               background.height=24 \
+               background.shadow.drawing=off
 
-for (( i=0; i<workspace_count; i++ )); do
-  sid=$((i + 1))
-  color_index=$((i % ${#SPACE_COLORS[@]}))
-  space_color="${SPACE_COLORS[color_index]}"
-
-  space=(
-    icon="${SPACE_ICONS[i]}"
-    icon.color=0xb0$space_color
-    icon.highlight_color=0xff${FG_PRIMARY:2}
-    icon.font.size=15.0
-    background.color=0x00000000
-    background.corner_radius=8
-    background.border_width=0
-    background.height=24
-    background.shadow.drawing=off
-    label.drawing=off
-    label.color=0xff${FG_SECONDARY:2}
-    label.font="JetBrainsMono Nerd Font:Medium:12.0"
-    label.padding_left=4
-    label.padding_right=4
-  )
-
-  sketchybar --add item "rift_space.$sid" left \
-             --set "rift_space.$sid" "${space[@]}"
-done
-
-sketchybar --add item rift_updater left \
-           --set rift_updater script="$PLUGIN_DIR/rift_workspaces.sh" \
-                              update_freq=3 \
-                              drawing=off
 
 ################################
 #  LEFT: Apps & Controls       #

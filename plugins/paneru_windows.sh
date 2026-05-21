@@ -1,5 +1,26 @@
 #!/usr/bin/env bash
-# Map macOS bundle_id or app name to Nerd Font icon
+
+BG_BASE="0x1f1f28"        
+BG_SURFACE="0x2a2a37"     
+BG_OVERLAY="0x363646"    
+
+WAVE_BLUE="0x7e9cd8"    
+SPRING_VIOLET="0x957fb8"
+AUTUMN_RED="0xc34043"   
+WAVE_AQUA="0x7fb4ca"     
+SPRING_GREEN="0x98bb6c"  
+AUTUMN_YELLOW="0xdca561" 
+SAKURA_PINK="0xd27e99"   
+OLD_WHITE="0xdcd7ba"     
+
+FG_PRIMARY="0xdcd7ba"    
+FG_SECONDARY="0xc8c093"  
+FG_DIM="0x727169"        
+
+WALL_BASE="0x2d343f"      
+WALL_MUTED="0x3d4a5c"     
+WALL_ACCENT="0x4a5f7a"    
+
 app_icon() {
   case "$1" in
     # Browsers
@@ -105,47 +126,27 @@ app_icon() {
   esac
 }
 
-RIFT_DATA="$(paneru query state 2>/dev/null)" || exit 0
-workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq '.virtual_workspaces[0].windows | length')
+PANERU_DATA="$(paneru query state 2>/dev/null || echo '{}')"
 
-for (( i=0; i<workspace_count; i++ )); do
-  sid=$((i + 1))
+window_count=$(printf '%s\n' "$PANERU_DATA" \
+  | jq '.virtual_workspaces[0].windows | length' 2>/dev/null || echo 0)
 
-  # Check if this workspace is active
-  is_active=$(printf '%s\n' "$RIFT_DATA" | jq -r ".[$i].is_active")
+# Build icons for each window
+icons=""
+for (( i=0; i<window_count; i++ )); do
+  app_id=$(printf '%s\n' "$PANERU_DATA" \
+    | jq -r ".virtual_workspaces[0].windows[$i].bundle_id // \
+              .virtual_workspaces[0].windows[$i].app_name // \
+              \"\"")
 
-  # Get unique bundle_ids for this workspace
-  bundle_ids=$(printf '%s\n' "$RIFT_DATA" \
-    | jq -r ".[$i].windows[].bundle_id" 2>/dev/null | sort -u)
-
-  icons=""
-  if [ -n "$bundle_ids" ]; then
-    while IFS= read -r bid; do
-      [ -z "$bid" ] && continue
-      icons+=$(app_icon "$bid")
-    done <<< "$bundle_ids"
-  fi
-
-  # Fallback: no windows, no icons
-  [ -z "$icons" ] && icons=""
-
-  # Base args
-  args=(label="$icons" label.padding_right=0)
-
-  # Add highlight based on active state
-  if [ "$is_active" = "true" ]; then
-    args+=(icon.highlight=on)
-  else
-    args+=(icon.highlight=off)
-  fi
-
-if [ -n "$icons" ]; then
-  sketchybar --set "rift_space.$sid" \
-    label="$icons" \
-    label.drawing=on \
-    label.padding_left=0 \
-    label.padding_right=10
-else
-  sketchybar --set "rift_space.$sid" label.drawing=off
-fi
+  icon="$(app_icon "$app_id")"
+  icons+="$icon "
 done
+
+icons="${icons%" "}"  # trim trailing space
+
+if [[ -z "$icons" ]]; then
+  icons=""  # fallback when no windows
+fi
+
+sketchybar --set paneru_windows icon="$icons"
