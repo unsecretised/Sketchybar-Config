@@ -105,8 +105,8 @@ app_icon() {
   esac
 }
 
-RIFT_DATA="$(paneru query state 2>/dev/null)" || exit 0
-workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq '.virtual_workspaces[0].windows | length')
+RIFT_DATA="$(rift-cli query workspaces 2>/dev/null)" || exit 0
+workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq 'length')
 
 for (( i=0; i<workspace_count; i++ )); do
   sid=$((i + 1))
