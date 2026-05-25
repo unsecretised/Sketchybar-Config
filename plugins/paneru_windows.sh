@@ -140,7 +140,7 @@ for (( i=0; i<window_count; i++ )); do
               \"\"")
 
   icon="$(app_icon "$app_id")"
-  icons+="$icon  "
+  icons+="$icon "
 done
 
 icons="${icons%" "}"  # trim trailing space
