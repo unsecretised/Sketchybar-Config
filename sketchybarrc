@@ -99,12 +99,12 @@ sketchybar --add item cosmic_sep left \
 
 SPACE_ICONS=("一" "二" "三" "四" "五" "六" "七" "八" "九" "十")
 SPACE_COLORS=(
-  "${WAVE_BLUE:2}"   "${SPRING_VIOLET:2}"  "${SAKURA_PINK:2}"  "${WAVE_AQUA:2}"   "${SPRING_GREEN:2}"
-  "${AUTUMN_YELLOW:2}"    "${AUTUMN_RED:2}"  "${WAVE_BLUE:2}"  "${SPRING_VIOLET:2}"  "${SAKURA_PINK:2}"
+  "${AUTUMN_YELLOW:2}"    "${AUTUMN_RED:2}"  "${WAVE_BLUE:2}"  "${SPRING_VIOLET:2}"  "${SPRING_GREEN:2}"
+  "${WAVE_BLUE:2}"   "${SPRING_VIOLET:2}"  "${SAKURA_PINK:2}"  "${WAVE_AQUA:2}"   "${AUTUMN_YELLOW:2}"
 )
 
-RIFT_DATA="$(rift-cli query workspaces 2>/dev/null || echo '[]')"
-workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq 'length')
+#RIFT_DATA="$(bobrwm query workspaces --json 2>/dev/null || echo '[]')"
+workspace_count=5
 max_spaces=${#SPACE_ICONS[@]}
 (( workspace_count > max_spaces )) && workspace_count=$max_spaces
 

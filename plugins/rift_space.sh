@@ -5,7 +5,7 @@ SPACE_ICONS=("I" "II" "III" "IV" "V" "VI" "VII" "VIII" "IX" "X")
 max_spaces=${#SPACE_ICONS[@]}
 
 # Get workspace info from rift-cli
-RIFT_DATA="$(rift-cli query workspaces 2>/dev/null || echo '[]')"
+RIFT_DATA="$($(bobrwm query workspaces --json | jq) 2>/dev/null || echo '[]')"
 
 active_index=$(printf '%s\n' "$RIFT_DATA" | jq '
   map(.is_active) | map(. == true) | index(true)
