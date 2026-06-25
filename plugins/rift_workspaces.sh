@@ -106,14 +106,14 @@ app_icon() {
   esac
 }
 
-RIFT_DATA="$(bobrwm query workspaces --json 2>/dev/null)" || exit 0
+RIFT_DATA="$(rift-cli query workspaces 2>/dev/null)" || exit 0
 workspace_count=$(printf '%s\n' "$RIFT_DATA" | jq 'length')
 
 for (( i=0; i<workspace_count; i++ )); do
   sid=$((i + 1))
 
-  # Check if this workspace is active (bobrwm uses "visible" instead of "is_active")
-  is_active=$(printf '%s\n' "$RIFT_DATA" | jq -r ".[$i].visible")
+  # Check if this workspace is active
+  is_active=$(printf '%s\n' "$RIFT_DATA" | jq -r ".[$i].is_active")
 
   # Get unique bundle_ids for this workspace
   bundle_ids=$(printf '%s\n' "$RIFT_DATA" \
@@ -140,13 +140,13 @@ for (( i=0; i<workspace_count; i++ )); do
     args+=(icon.highlight=off)
   fi
 
-  if [ -n "$icons" ]; then
-    sketchybar --set "rift_space.$sid" \
-      label="$icons" \
-      label.drawing=on \
-      label.padding_left=0 \
-      label.padding_right=10
-  else
-    sketchybar --set "rift_space.$sid" label.drawing=off
-  fi
+if [ -n "$icons" ]; then
+  sketchybar --set "rift_space.$sid" \
+    label="$icons" \
+    label.drawing=on \
+    label.padding_left=0 \
+    label.padding_right=10
+else
+  sketchybar --set "rift_space.$sid" label.drawing=off
+fi
 done
