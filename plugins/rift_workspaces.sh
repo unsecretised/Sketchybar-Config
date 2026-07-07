@@ -61,7 +61,7 @@ app_icon() {
     "com.apple.Preview" | Preview)               echo "" ;;
     "com.apple.Photos" | Photos)                 echo "" ;;
     "com.apple.Calculator" | Calculator)         echo "" ;;
-    "com.apple.Calendar" | Calendar)             echo "" ;;
+    "com.apple.iCal" | Calendar)                 echo "" ;;
     "com.apple.Notes" | Notes)                   echo "" ;;
     "com.apple.Reminders" | Reminders)           echo "" ;;
     "com.apple.Maps" | Maps)                     echo "" ;;
