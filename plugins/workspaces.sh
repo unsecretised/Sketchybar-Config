@@ -77,6 +77,7 @@ for (( i=0; i<count; i++ )); do
   if [ -n "$bundle_ids" ]; then
     while IFS= read -r bid; do
       [ -z "$bid" ] && continue
+      [ -n "$icons" ] && icons+=" "
       icons+="$(app_icon "$bid")"
     done <<< "$bundle_ids"
   fi
