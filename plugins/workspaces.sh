@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WAVE_BLUE="0x7e9cd8"
+FG_DIM="0x727169"
 
 app_icon() {
   case "$1" in
@@ -88,9 +88,9 @@ for (( i=0; i<count; i++ )); do
       label="$icons" \
       label.drawing=on \
       icon.padding_right=0 \
-      background.color=0x30${WAVE_BLUE:2} \
+      background.color=0x30${FG_DIM:2} \
       background.border_width=1 \
-      background.border_color=0x60${WAVE_BLUE:2}
+      background.border_color=0x60${FG_DIM:2}
   else
     sketchybar --set "workspace.$sid" \
       icon.highlight=off \

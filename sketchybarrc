@@ -4,19 +4,11 @@ CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##############################
-#  Kanagawa-inspired palette #
+#  Monochrome palette        #
 ##############################
 BG_BASE="0x1f1f28"
 BG_SURFACE="0x2a2a37"
 BG_OVERLAY="0x363646"
-
-WAVE_BLUE="0x7e9cd8"
-SPRING_VIOLET="0x957fb8"
-AUTUMN_RED="0xc34043"
-WAVE_AQUA="0x7fb4ca"
-SPRING_GREEN="0x98bb6c"
-AUTUMN_YELLOW="0xdca561"
-SAKURA_PINK="0xd27e99"
 
 FG_PRIMARY="0xdcd7ba"
 FG_SECONDARY="0xc8c093"
@@ -43,7 +35,7 @@ default=(
   icon.font="JetBrainsMono Nerd Font:Bold:14.0"
   label.font="JetBrainsMono Nerd Font:Medium:12.0"
 
-  icon.color=0xff${WAVE_BLUE:2}
+  icon.color=0x80${FG_DIM:2}
   label.color=0xff${FG_PRIMARY:2}
 
   icon.padding_left=6
@@ -65,7 +57,6 @@ sketchybar --default "${default[@]}"
 #  LEFT: Workspaces          #
 ##############################
 
-# Create workspace items for workspaces 1-10
 for sid in {1..10}; do
   sketchybar --add item "workspace.$sid" left \
              --set "workspace.$sid" \
@@ -82,12 +73,11 @@ for sid in {1..10}; do
                background.color=0x00000000 \
                background.corner_radius=6 \
                background.border_width=0 \
-               background.border_color=0x40${WAVE_BLUE:2} \
+               background.border_color=0x40${FG_DIM:2} \
                background.height=22 \
                click_script="bobrwm focus-workspace $sid"
 done
 
-# Separator between workspaces and front app
 sketchybar --add item sep.left left \
            --set sep.left icon= \
                       icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
@@ -97,7 +87,6 @@ sketchybar --add item sep.left left \
                       background.drawing=off \
                       label.drawing=off
 
-# Front app
 sketchybar --add item front_app left \
            --set front_app \
                icon.drawing=off \
@@ -112,7 +101,6 @@ sketchybar --add item front_app left \
 #  RIGHT: System             #
 ##############################
 
-# Clock
 sketchybar --add item clock right \
            --set clock \
                icon=󰥔 \
@@ -124,7 +112,6 @@ sketchybar --add item clock right \
                update_freq=1 \
                script="$PLUGIN_DIR/clock.sh"
 
-# Separator
 sketchybar --add item sep.right1 right \
            --set sep.right1 icon= \
                         icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
@@ -134,7 +121,6 @@ sketchybar --add item sep.right1 right \
                         background.drawing=off \
                         label.drawing=off
 
-# Battery
 sketchybar --add item battery right \
            --set battery \
                icon=󰁹 \
@@ -147,7 +133,6 @@ sketchybar --add item battery right \
                script="$PLUGIN_DIR/battery.sh" \
            --subscribe battery system_woke power_source_change
 
-# Separator
 sketchybar --add item sep.right2 right \
            --set sep.right2 icon= \
                         icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
@@ -157,7 +142,6 @@ sketchybar --add item sep.right2 right \
                         background.drawing=off \
                         label.drawing=off
 
-# Volume
 sketchybar --add item volume right \
            --set volume \
                icon=󰕾 \
@@ -168,6 +152,64 @@ sketchybar --add item volume right \
                label.padding_right=2 \
                script="$PLUGIN_DIR/volume.sh" \
            --subscribe volume volume_change
+
+##############################
+#  Spotify                    #
+##############################
+
+SPOTIFY_EVENT="com.spotify.client.PlaybackStateChanged"
+
+sketchybar --add event spotify_change "$SPOTIFY_EVENT"
+
+sketchybar --add item spotify right \
+           --set spotify \
+               icon= \
+               icon.font.size=14.0 \
+               icon.color=0x80${FG_DIM:2} \
+               label.drawing=off \
+               script="$PLUGIN_DIR/spotify.sh" \
+               click_script="sketchybar --set spotify popup.drawing=toggle" \
+               popup.horizontal=on \
+               popup.align=center \
+               popup.background.color=0xf0${BG_BASE:2} \
+               popup.background.corner_radius=20 \
+               popup.background.border_width=1 \
+               popup.background.border_color=0x40${FG_DIM:2} \
+               popup.background.shadow.drawing=off \
+           --subscribe spotify spotify_change mouse.clicked
+
+sketchybar --add item spotify.track popup.spotify \
+           --set spotify.track \
+               icon.drawing=off \
+               label="Not Playing" \
+               label.color=0xff${FG_PRIMARY:2} \
+               label.font="JetBrainsMono Nerd Font:SemiBold:12.0" \
+               label.padding_left=14 \
+               label.padding_right=14 \
+               background.color=0x50${BG_SURFACE:2} \
+               background.corner_radius=8 \
+               background.height=24
+
+controls=("back:󰒮" "play:󰐊" "next:󰒭" "shuffle:󰒝" "repeat:󰑖")
+
+for ctrl in "${controls[@]}"; do
+  IFS=':' read -r name icon <<< "$ctrl"
+
+  sketchybar --add item "spotify.$name" popup.spotify \
+             --set "spotify.$name" \
+                 icon="$icon" \
+                 icon.font.size=16.0 \
+                 icon.color=0xcc${FG_DIM:2} \
+                 icon.highlight_color=0xff${FG_PRIMARY:2} \
+                 label.drawing=off \
+                 background.color=0x50${BG_SURFACE:2} \
+                 background.corner_radius=8 \
+                 background.border_width=1 \
+                 background.border_color=0x30${FG_DIM:2} \
+                 background.shadow.drawing=off \
+                 script="$PLUGIN_DIR/spotify.sh" \
+             --subscribe "spotify.$name" mouse.clicked spotify_change
+done
 
 ##############################
 #  Workspace Updater (bobrwm)#
@@ -190,17 +232,17 @@ sketchybar --add bracket left_group \
              background.corner_radius=14 \
              background.height=30 \
              background.border_width=1 \
-             background.border_color=0x30${WAVE_BLUE:2} \
+             background.border_color=0x30${FG_DIM:2} \
              background.shadow.drawing=off
 
 sketchybar --add bracket right_group \
-             '/clock/' '/sep\.right*/' '/battery/' '/volume/' \
+             '/clock/' '/sep\.right*/' '/battery/' '/volume/' '/spotify/' \
            --set right_group \
              background.color=0xd0${BG_BASE:2} \
              background.corner_radius=14 \
              background.height=30 \
              background.border_width=1 \
-             background.border_color=0x30${SPRING_GREEN:2} \
+             background.border_color=0x30${FG_DIM:2} \
              background.shadow.drawing=off
 
 ##############################

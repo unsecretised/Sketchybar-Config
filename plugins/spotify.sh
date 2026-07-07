@@ -1,16 +1,37 @@
 #!/bin/sh
 
-next() {
-  osascript -e 'tell application "Spotify" to play next track'
+update() {
+  RUNNING=$(osascript -e 'application "Spotify" is running')
+
+  if [ "$RUNNING" = "false" ]; then
+    sketchybar -m --set spotify drawing=off popup.drawing=off
+    exit 0
+  fi
+
+  STATE=$(osascript -e 'tell application "Spotify" to player state')
+  TRACK=$(osascript -e 'tell application "Spotify" to name of current track')
+  ARTIST=$(osascript -e 'tell application "Spotify" to artist of current track')
+
+  SHUFFLE=$(osascript -e 'tell application "Spotify" to shuffling')
+  REPEAT=$(osascript -e 'tell application "Spotify" to repeating')
+
+  sketchybar -m --set spotify drawing=on
+
+  if [ "$STATE" = "playing" ]; then
+    sketchybar -m --set spotify.track label="${TRACK}  ${ARTIST}"
+    sketchybar -m --set spotify.play icon=󰐊
+  else
+    sketchybar -m --set spotify.track label="${TRACK}  ${ARTIST} (paused)"
+    sketchybar -m --set spotify.play icon=󰐊
+  fi
+
+  sketchybar -m --set spotify.shuffle icon.highlight="$SHUFFLE"
+  sketchybar -m --set spotify.repeat icon.highlight="$REPEAT"
 }
 
-back() {
-  osascript -e 'tell application "Spotify" to play previous track'
-}
-
-play() {
-  osascript -e 'tell application "Spotify" to playpause'
-}
+next()     { osascript -e 'tell application "Spotify" to play next track'; }
+back()     { osascript -e 'tell application "Spotify" to play previous track'; }
+play()     { osascript -e 'tell application "Spotify" to playpause'; }
 
 repeat() {
   REPEAT=$(osascript -e 'tell application "Spotify" to get repeating')
@@ -34,64 +55,17 @@ shuffle() {
   fi
 }
 
-update() {
-  # Check if Spotify is running
-  SPOTIFY_RUNNING=$(osascript -e 'application "Spotify" is running')
-
-  if [ "$SPOTIFY_RUNNING" = "false" ]; then
-    # Hide widget if Spotify is closed
-    sketchybar -m --set spotify.name drawing=off popup.drawing=off
-    exit 0
-  fi
-
-  # Default values
-  TRACK=""
-  ARTIST="Not Playing"
-  ALBUM=""
-  SHUFFLE=$(osascript -e 'tell application "Spotify" to get shuffling')
-  REPEAT=$(osascript -e 'tell application "Spotify" to get repeating')
-  STATE=$(osascript -e 'tell application "Spotify" to player state')
-
-  if [ "$STATE" = "playing" ]; then
-    TRACK=$(osascript -e 'tell application "Spotify" to name of current track' | cut -c1-10)
-    ARTIST=$(osascript -e 'tell application "Spotify" to artist of current track' | cut -c1-5)
-    ALBUM=$(osascript -e 'tell application "Spotify" to album of current track' | cut -c1-15)
-  fi
-
-  args=()
-
-  # Always show the widget if Spotify is running
-  if [ "$ARTIST" = "" ]; then
-    args+=(--set spotify.name label="${TRACK} ${ALBUM}" drawing=on)
-  else
-    args+=(--set spotify.name label="${TRACK} ${ARTIST}" drawing=on)
-  fi
-
-  if [ "$STATE" = "playing" ]; then
-    args+=(--set spotify.play icon=􀊆)
-  else
-    args+=(--set spotify.play icon=􀊄)
-  fi
-
-  args+=(--set spotify.shuffle icon.highlight="$SHUFFLE")
-  args+=(--set spotify.repeat icon.highlight="$REPEAT")
-
-  sketchybar -m "${args[@]}"
-}
-
 mouse_clicked() {
   case "$NAME" in
-    "spotify.next") next ;;
-    "spotify.back") back ;;
-    "spotify.play") play ;;
-    "spotify.shuffle") shuffle ;;
-    "spotify.repeat") repeat ;;
-    *) exit ;;
+    "spotify.next")     next ;;
+    "spotify.back")     back ;;
+    "spotify.play")     play ;;
+    "spotify.shuffle")  shuffle ;;
+    "spotify.repeat")   repeat ;;
   esac
 }
 
 case "$SENDER" in
   "mouse.clicked") mouse_clicked ;;
-  "forced") exit ;;
-  *) update ;;
+  *)               update ;;
 esac
