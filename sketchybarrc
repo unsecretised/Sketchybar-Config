@@ -103,7 +103,7 @@ SPACE_COLORS=(
   "${WAVE_BLUE:2}"   "${SPRING_VIOLET:2}"  "${SAKURA_PINK:2}"  "${WAVE_AQUA:2}"   "${AUTUMN_YELLOW:2}"
 )
 
-RIFT_DATA="$(rift-cli query workspaces --json 2>/dev/null || echo '[]')"
+#RIFT_DATA="$(bobrwm query workspaces --json 2>/dev/null || echo '[]')"
 workspace_count=5
 max_spaces=${#SPACE_ICONS[@]}
 (( workspace_count > max_spaces )) && workspace_count=$max_spaces
