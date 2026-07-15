@@ -24,6 +24,7 @@ app_icon() {
     "com.sublimetext.4" | "Sublime Text")        echo "" ;;
     "com.apple.dt.Xcode" | Xcode)                echo "" ;;
     Discord | "com.hnc.Discord")                 echo "" ;;
+    Vesktop | "dev.vencord.vesktop")             echo "" ;;
     "com.tinyspeck.slackmacgap" | Slack)         echo "" ;;
     "us.zoom.xos" | zoom.us | Zoom)              echo "" ;;
     "com.apple.FaceTime" | FaceTime)             echo "" ;;
