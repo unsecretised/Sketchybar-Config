@@ -4,6 +4,7 @@ FG_DIM="0x727169"
 
 app_icon() {
   case "$1" in
+    "com.umangsurana.idiot")                     echo "" ;;
     "com.apple.Safari" | Safari)                 echo "" ;;
     Firefox | "org.mozilla.firefox")             echo "" ;;
     Zen | "app.zen-browser.zen")                 echo "󰺕" ;;
