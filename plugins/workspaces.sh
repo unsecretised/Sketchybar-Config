@@ -20,6 +20,7 @@ app_icon() {
     "io.alacritty" | Alacritty)                  echo "" ;;
     "org.wezfurlong.wezterm" | WezTerm)          echo "" ;;
     Code | "com.microsoft.VSCode")               echo "" ;;
+    "net.imput.helium")                          echo ""  ;; 
     "com.jetbrains.intellij" | IntelliJ*)        echo "" ;;
     "com.jetbrains.pycharm" | PyCharm*)          echo "" ;;
     "com.sublimetext.4" | "Sublime Text")        echo "" ;;
