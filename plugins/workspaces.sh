@@ -15,6 +15,7 @@ app_icon() {
     "Firefox Developer Edition")                 echo "" ;;
     "com.apple.Terminal" | Terminal)             echo "" ;;
     "com.googlecode.iterm2" | iTerm2)            echo "" ;;
+    "com.apple.reminders")                       echo "" ;;
     Ghostty | "com.mitchellh.ghostty")           echo "" ;;
     "net.kovidgoyal.kitty" | kitty)              echo "" ;;
     "io.alacritty" | Alacritty)                  echo "" ;;
