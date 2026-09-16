@@ -6,24 +6,24 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 ##############################
 #  Monochrome palette        #
 ##############################
-BG_BASE="0x0d1220"
-BG_SURFACE="0x1a2332"
-BG_OVERLAY="0x242f47"
+BG_BASE="0x1f1f28"
+BG_SURFACE="0x2a2a37"
+BG_OVERLAY="0x363646"
 
-FG_PRIMARY="0xe8eef6"
-FG_SECONDARY="0xb9cbe0"
-FG_DIM="0x5a6b85"
+FG_PRIMARY="0xdcd7ba"
+FG_SECONDARY="0xc8c093"
+FG_DIM="0xc0a36e"
 
 sketchybar --bar position=top \
                 height=36 \
-                color=0xc0${BG_BASE:2} \
+                color=0x00000000 \
                 shadow=off \
                 sticky=on \
                 padding_left=12 \
                 padding_right=12 \
                 corner_radius=0 \
                 border_width=0 \
-                blur_radius=40 \
+                blur_radius=0 \
                 y_offset=0 \
                 margin=0 \
                 notch_width=0
@@ -35,7 +35,7 @@ default=(
   icon.font="JetBrainsMono Nerd Font:Bold:14.0"
   label.font="JetBrainsMono Nerd Font:Medium:12.0"
 
-  icon.color=0xb0${FG_DIM:2}
+  icon.color=0x99${FG_DIM:2}
   label.color=0xff${FG_PRIMARY:2}
 
   icon.padding_left=6
@@ -62,7 +62,7 @@ for sid in {1..5}; do
              --set "workspace.$sid" \
                icon="$sid" \
                icon.font="JetBrainsMono Nerd Font:Bold:13.0" \
-               icon.color=0xb0${FG_DIM:2} \
+               icon.color=0x99${FG_DIM:2} \
                icon.highlight_color=0xff${FG_PRIMARY:2} \
                icon.padding_left=8 \
                icon.padding_right=2 \
@@ -81,7 +81,7 @@ done
 sketchybar --add item sep.left left \
            --set sep.left icon= \
                       icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
-                      icon.color=0x50${FG_DIM:2} \
+                      icon.color=0x30${FG_DIM:2} \
                       icon.padding_left=4 \
                       icon.padding_right=4 \
                       background.drawing=off \
@@ -105,7 +105,7 @@ sketchybar --add item clock right \
            --set clock \
                icon=󰥔 \
                icon.font.size=14.0 \
-               icon.color=0xb0${FG_DIM:2} \
+               icon.color=0x99${FG_DIM:2} \
                label.color=0xff${FG_PRIMARY:2} \
                label.font="JetBrainsMono Nerd Font:SemiBold:12.0" \
                label.padding_right=2 \
@@ -115,7 +115,7 @@ sketchybar --add item clock right \
 sketchybar --add item sep.right1 right \
            --set sep.right1 icon= \
                         icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
-                        icon.color=0x50${FG_DIM:2} \
+                        icon.color=0x30${FG_DIM:2} \
                         icon.padding_left=4 \
                         icon.padding_right=4 \
                         background.drawing=off \
@@ -125,7 +125,7 @@ sketchybar --add item battery right \
            --set battery \
                icon=󰁹 \
                icon.font.size=14.0 \
-               icon.color=0xb0${FG_DIM:2} \
+               icon.color=0x99${FG_DIM:2} \
                label.color=0xff${FG_SECONDARY:2} \
                label.font="JetBrainsMono Nerd Font:Medium:12.0" \
                label.padding_right=2 \
@@ -136,7 +136,7 @@ sketchybar --add item battery right \
 sketchybar --add item sep.right2 right \
            --set sep.right2 icon= \
                         icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
-                        icon.color=0x50${FG_DIM:2} \
+                        icon.color=0x30${FG_DIM:2} \
                         icon.padding_left=4 \
                         icon.padding_right=4 \
                         background.drawing=off \
@@ -146,7 +146,7 @@ sketchybar --add item volume right \
            --set volume \
                icon=󰕾 \
                icon.font.size=14.0 \
-               icon.color=0xb0${FG_DIM:2} \
+               icon.color=0x99${FG_DIM:2} \
                label.color=0xff${FG_SECONDARY:2} \
                label.font="JetBrainsMono Nerd Font:Medium:12.0" \
                label.padding_right=2 \
@@ -163,7 +163,7 @@ sketchybar --add item music right \
            --set music \
                icon= \
                icon.font.size=14.0 \
-               icon.color=0xb0${FG_DIM:2} \
+               icon.color=0x99${FG_DIM:2} \
                label.drawing=off \
                script="$PLUGIN_DIR/music.sh" \
                click_script="sketchybar --set music popup.drawing=toggle" \
@@ -201,7 +201,7 @@ for ctrl in "${controls[@]}"; do
                  background.color=0x50${BG_SURFACE:2} \
                  background.corner_radius=8 \
                  background.border_width=1 \
-                 background.border_color=0x50${FG_DIM:2} \
+                 background.border_color=0x30${FG_DIM:2} \
                  background.shadow.drawing=off \
                  script="$PLUGIN_DIR/music.sh" \
              --subscribe "music.$name" mouse.clicked music_change
@@ -224,22 +224,24 @@ sketchybar --add item workspaces_updater left \
 sketchybar --add bracket left_group \
              '/workspace\..*/' '/sep\.left/' '/front_app/' \
            --set left_group \
-             background.color=0xe0${BG_BASE:2} \
-             background.corner_radius=14 \
-             background.height=30 \
-             background.border_width=1 \
-             background.border_color=0x50${FG_DIM:2} \
-             background.shadow.drawing=off
+              background.color=0x80${BG_BASE:2} \
+              background.corner_radius=14 \
+              background.height=30 \
+              background.border_width=1 \
+              background.border_color=0x30${FG_DIM:2} \
+              background.blur_radius=40 \
+              background.shadow.drawing=off
 
 sketchybar --add bracket right_group \
              '/clock/' '/sep\.right*/' '/battery/' '/volume/' '/music/' \
            --set right_group \
-             background.color=0xe0${BG_BASE:2} \
+               background.color=0x80${BG_BASE:2} \
              background.corner_radius=14 \
              background.height=30 \
              background.border_width=1 \
-             background.border_color=0x50${FG_DIM:2} \
-             background.shadow.drawing=off
+               background.border_color=0x30${FG_DIM:2} \
+               background.blur_radius=40 \
+               background.shadow.drawing=off
 
 ##############################
 #  Final                     #
