@@ -7,6 +7,7 @@ app_icon() {
     "com.umangsurana.idiot")                     echo "" ;;
     "com.apple.Safari" | Safari)                 echo "" ;;
     Firefox | "org.mozilla.firefox")             echo "" ;;
+    "dev.sakuracord.SakuraCord")                 echo "" ;;
     Zen | "app.zen-browser.zen")                 echo "󰺕" ;;
     "com.google.Chrome" | "Google Chrome")       echo "" ;;
     "com.brave.Browser" | Brave*)                echo "" ;;
